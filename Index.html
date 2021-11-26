@@ -7,9 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
+   crossorigin="">
 
-<a id="songtitle"></a>
+</script>
 
 <form method="get"  action="">
     <input type="text" id="fname" name="fname"><br><br>
@@ -18,30 +18,30 @@
 
 <div id="map"></div> 
 <script>
-
-    var buurtNaamVar="Hagenkamp";
+    
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const nameBuurt = urlParams.get('fname');
        
-    var regionSelect = [];
+var regionSelect = [];
 
 const settings = {
 	"async": true,
 	"crossDomain": true,
-	"url": "https://data.eindhoven.nl/api/records/1.0/search/?dataset=buurten&q=&facet=buurtcode&facet=buurtnaam&facet=wijkcode&facet=wijknaam&refine.buurtnaam=" + buurtNaamVar,
+	"url": "https://data.eindhoven.nl/api/records/1.0/search/?dataset=buurten&q=&facet=buurtcode&facet=buurtnaam&facet=wijkcode&facet=wijknaam&refine.buurtnaam=" + nameBuurt,
 	"method": "GET",
 
 };
 $.ajax(settings).done(function (response) {
-  
     coordinaten = (response['records'][0]['fields']['geo_shape']['coordinates'][0]);
 
-    for (let i = 0; i < coordinaten.length; i++) {
+    for (let i = 0; i < coordinaten.length; i++) {  
         regionSelect.push([coordinaten[i][1], coordinaten[i][0]]); 
-}
-
-polygon = L.polygon(regionSelect);
-        
+    }
+  
+polygon = L.polygon(regionSelect);   
         polygon.addTo(mymap)
-
+        
 });
 
     
